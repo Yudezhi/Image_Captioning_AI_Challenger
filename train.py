@@ -233,8 +233,12 @@ def train(opt):
         if epoch >= opt.max_epochs and opt.max_epochs != -1:
             break
 
+startime = time.asctime( time.localtime(time.time()) )
+print ("==Start TIME==", startime)
+
 opt = opts.parse_opt()
 # for debug
 # opt.max_epochs = 51
-print("==opt.start_from is not None:",opt.start_from)
 train(opt)
+endtime = time.asctime( time.localtime(time.time()) )
+print ("==End TIME==", endtime)
