@@ -71,10 +71,16 @@ class AttModel(CaptionModel):
             self.logit = nn.Sequential(*(reduce(lambda x,y:x+y, self.logit) + [nn.Linear(self.rnn_size, self.vocab_size + 1)]))
         self.ctx2att = nn.Linear(self.rnn_size, self.att_hid_size)
 
+    # ref ： https://github.com/Yudezhi/self-critical.pytorch/blob/master/captioning/models/AttModel.py
     def init_hidden(self, bsz):
-        weight = next(self.parameters()).data
-        return (Variable(weight.new(self.num_layers, bsz, self.rnn_size).zero_()),
-                Variable(weight.new(self.num_layers, bsz, self.rnn_size).zero_()))
+        # weight = next(self.parameters()).data
+        # return (Variable(weight.new(self.num_layers, bsz, self.rnn_size).zero_()),
+        #         Variable(weight.new(self.num_layers, bsz, self.rnn_size).zero_()))
+        weight = self.logit.weight \
+                 if hasattr(self.logit, "weight") \
+                 else self.logit[0].weight
+        return (weight.new_zeros(self.num_layers, bsz, self.rnn_size),
+                weight.new_zeros(self.num_layers, bsz, self.rnn_size))
 
     def clip_att(self, att_feats, att_masks):
         # Clip the length of att_masks and att_feats to the maximum length
@@ -88,6 +94,7 @@ class AttModel(CaptionModel):
         att_feats, att_masks = self.clip_att(att_feats, att_masks)
 
         batch_size = fc_feats.size(0)
+        # BUG
         state = self.init_hidden(batch_size)
 
         # outputs = []

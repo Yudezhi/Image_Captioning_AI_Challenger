@@ -3,6 +3,8 @@ __pycache__
 data
 eval_results
 log_dense_box_bn
+Multi_log_dense_box_bn
+Multi_log_multi_dense_box_bn
 */__pycache__
 xe
 train_mahc.log
