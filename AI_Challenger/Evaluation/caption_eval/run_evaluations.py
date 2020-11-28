@@ -44,7 +44,7 @@ def compute_m1(json_predictions_file, reference_file):
     else:
         # print output evaluation scores
         for metric, score in coco_eval.eval.items():
-            print '%s: %.3f'%(metric, score)
+            print ('%s: %.3f'%(metric, score))
             m1_score[metric] = score
     return m1_score
 
@@ -60,7 +60,7 @@ def main():
 
     json_predictions_file = args.submit
     reference_file = args.ref
-    print compute_m1(json_predictions_file, reference_file)
+    print (compute_m1(json_predictions_file, reference_file))
 
 
 if __name__ == "__main__":

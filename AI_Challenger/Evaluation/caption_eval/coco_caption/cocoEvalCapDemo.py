@@ -1,6 +1,6 @@
 #%matplotlib inline
-from pycxtools.coco import COCO
-from pycxevalcap.eval import COCOEvalCap
+from .pycxtools.coco import COCO
+from .pycxevalcap.eval import COCOEvalCap
 import matplotlib.pyplot as plt
 import skimage.io as io
 import pylab

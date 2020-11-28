@@ -22,7 +22,7 @@ import unittest
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-from run_evaluations import compute_m1
+from .run_evaluations import compute_m1
 
 
 class TestComputem1(unittest.TestCase):
