@@ -7,6 +7,13 @@
 
 其他类似项目遇到的问题: https://github.com/ruotianluo/ImageCaptioning.pytorch/issues/49
 
+## 注意
+
+20201207  在查看多GPU模式下的CIDEr训练图时发现，效果图和单GPU有较大差别
+
+图像如下： [多GPU训练CIDEr日志](https://smailnjueducn-my.sharepoint.com/:i:/g/personal/mahc_smail_nju_edu_cn/EcMuy-CPZ75Mj9GoFT-MV-sBq5H4YcN6i4Bctj4m3PBcSA?e=a7mhwl)
+[单GPU训练](https://smailnjueducn-my.sharepoint.com/:i:/g/personal/mahc_smail_nju_edu_cn/Eeo4VtgZYbxNkWYGMge7t-sBTGYzRfQttIZ1pP9RcYsDyg?e=lCBlQY)
+
 
 ## 错误记录
 

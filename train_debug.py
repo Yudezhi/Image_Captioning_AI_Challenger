@@ -157,6 +157,7 @@ def train(opt):
 
         # Write the training loss summary
         # debug 的时候改为30
+        # ####################保存log#################################
         if (iteration % opt.losses_log_every == 0):
             if tf is not None:
                 add_summary_value(tf_summary_writer, 'train_loss', train_loss, iteration)
@@ -172,6 +173,7 @@ def train(opt):
 
         # make evaluation on validation set, and save model
         # debug 的时候把0 改为30
+        #######################保存checkpoint##########################
         if (iteration % opt.save_checkpoint_every == 0):
             # eval model
             eval_kwargs = {'split': 'val',
