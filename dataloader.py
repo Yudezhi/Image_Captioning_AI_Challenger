@@ -43,7 +43,7 @@ class DataLoader(data.Dataset):
         self.norm_box_feat = getattr(opt, 'norm_box_feat', 0)
 
         # load the json file which contains additional information about the dataset
-        print('DataLoader loading json file: ', opt.input_json)
+        print('DataLoader loading json file: ', opt.input_json) # data/chinesetalk.json
         self.info = json.load(open(self.opt.input_json))
         self.ix_to_word = self.info['ix_to_word']
         self.vocab_size = len(self.ix_to_word)
@@ -119,6 +119,8 @@ class DataLoader(data.Dataset):
 
     def get_batch(self, split, batch_size=None, seq_per_img=None):
         batch_size = batch_size or self.batch_size
+        print("===batch_size==",batch_size)
+        # input()
         seq_per_img = seq_per_img or self.seq_per_img
 
         fc_batch = [] # np.ndarray((batch_size * seq_per_img, self.opt.fc_feat_size), dtype = 'float32')

@@ -15,6 +15,11 @@
 [单GPU训练](https://smailnjueducn-my.sharepoint.com/:i:/g/personal/mahc_smail_nju_edu_cn/Eeo4VtgZYbxNkWYGMge7t-sBTGYzRfQttIZ1pP9RcYsDyg?e=lCBlQY)
 
 
+20201209 使用best_model 进行测评后，发现多GPU比单个的效果差很多，相关结果已经写在周报中。重新开始训练，见训练日志 .log
+
+
+
+
 ## 错误记录
 
 * TypeError: Unicode-objects must be encoded before hashing
@@ -51,7 +56,7 @@ SyntaxError: invalid syntax
 
 * FileNotFoundError: [Errno 2] No such file or directory: 'log_dense_box_bn/infos_dense_box_bn.pkl'
 
-> 将 run_train.sh 中的 "--use_bn 1 --use_box 1" 改为  "--use_bn 0 --use_box 0"  ???
+> 将 run_train.sh 中的 "--use_bn 1 --use_box 1" 改为  "--use_bn 0 --use_box 0"  ???  好像不是
 
 * NameError: name 'reduce' is not defined
 
@@ -88,3 +93,34 @@ IndexError: invalid index of a 0-dim tensor. Use `tensor.item()` in Python or `t
 
 * UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 0: invalid start byte
 > 把打开文件的方式由  r 改为  rb
+
+
+## 评测错误
+
+* infos = cPickle.load(f) UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 0: invalid start byte
+> 把打开文件的方式由  r 改为  rb
+
+* assert vars(opt)[k] == vars(infos['opt'])[k], k + ' option not consistent  AssertionError: input_att_dir option not consistent
+> eval 文件中 opt.input_att_dir = infos['opt'].input_box_dir  改为 opt.input_box_dir = infos['opt'].input_box_dir
+
+* NameError: name 'reduce' is not defined
+> from functools import reduce
+
+
+
+## 数据文件说明
+
+* chinese_talk.json
+> 存储着词典（数字-词语），图像的id，图像尺寸，存储地址，属于训练、验证或者测试的分类信息。
+
+* chinese_talk_label.h5
+> 100M大小，里面存储着4个文件，分别是 label_end_ix ,label_start_ix,label_length,labels .前面两个维度是240000，第三个维度 1199985，第四个 1199985*20
+
+* fc--.npy
+> 存储一张图像的平均特征，(2048) 维度
+
+* box--.npy
+> 存储图像中box 的坐标位置，注意box数量这里并不固定，例如维度为 (43，4)
+
+* att--.npz
+> 存储这box 各自的特征，例如  (43，2048)

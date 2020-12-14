@@ -70,7 +70,7 @@ class AttModel(CaptionModel):
             self.logit = [[nn.Linear(self.rnn_size, self.rnn_size), nn.ReLU(), nn.Dropout(0.5)] for _ in range(opt.logit_layers - 1)]
             self.logit = nn.Sequential(*(reduce(lambda x,y:x+y, self.logit) + [nn.Linear(self.rnn_size, self.vocab_size + 1)]))
         self.ctx2att = nn.Linear(self.rnn_size, self.att_hid_size)
-
+    # BUG
     # ref ： https://github.com/Yudezhi/self-critical.pytorch/blob/master/captioning/models/AttModel.py
     def init_hidden(self, bsz):
         # weight = next(self.parameters()).data

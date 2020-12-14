@@ -9,3 +9,4 @@ debug_dense_box_bn
 */__pycache__
 xe
 train_mahc.log
+vis/vis.json

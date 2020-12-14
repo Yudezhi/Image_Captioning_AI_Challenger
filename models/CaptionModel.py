@@ -15,6 +15,7 @@ import torch.nn.functional as F
 from torch.autograd import *
 import misc.utils as utils
 
+from functools import reduce
 
 class CaptionModel(nn.Module):
     def __init__(self):

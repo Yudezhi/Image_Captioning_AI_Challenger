@@ -22,7 +22,7 @@ import torch
 parser = argparse.ArgumentParser()
 # Input paths
 parser.add_argument('--model', type=str, default='',
-                help='path to model to evaluate')
+                help='path to model has trained to evaluate')
 parser.add_argument('--cnn_model', type=str,  default='resnet101',
                 help='resnet101, resnet152')
 parser.add_argument('--infos_path', type=str, default='',
@@ -87,14 +87,15 @@ parser.add_argument('--verbose_loss', type=int, default=0,
 opt = parser.parse_args()
 
 # Load infos
-with open(opt.infos_path) as f:
+with open(opt.infos_path,'rb') as f:
     infos = cPickle.load(f)
 
 # override and collect parameters
 if len(opt.input_fc_dir) == 0:
     opt.input_fc_dir = infos['opt'].input_fc_dir
     opt.input_att_dir = infos['opt'].input_att_dir
-    opt.input_att_dir = infos['opt'].input_box_dir
+    # jason 修改
+    opt.input_box_dir = infos['opt'].input_box_dir
     opt.input_label_h5 = infos['opt'].input_label_h5
 if len(opt.input_json) == 0:
     opt.input_json = infos['opt'].input_json
@@ -106,6 +107,9 @@ ignore = ["id", "batch_size", "beam_size", "start_from", "language_eval"]
 for k in vars(infos['opt']).keys():
     if k not in ignore:
         if k in vars(opt):
+            # print(vars(opt)[k])
+            # print(vars(infos['opt'])[k])
+            # print('k:',k)
             assert vars(opt)[k] == vars(infos['opt'])[k], k + ' option not consistent'
         else:
             vars(opt).update({k: vars(infos['opt'])[k]}) # copy over options from model
@@ -114,9 +118,11 @@ vocab = infos['vocab'] # ix -> word mapping
 
 # Setup the model
 model = models.setup(opt)
+# 加载已经训练结束的模型
 model.load_state_dict(torch.load(opt.model))
 model.cuda()
 model.eval()
+# 一个类，作用尚未可知
 crit = utils.LanguageModelCriterion()
 
 # Create the Data Loader instance

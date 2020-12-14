@@ -23,6 +23,7 @@ The json file has a dict that contains:
   such as in particular the 'split' it was assigned to.
 """
 
+# 本文件可以正常运行，生成指定文件夹下 resnet 特征。
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -46,6 +47,8 @@ preprocess = trn.Compose([
         #trn.ToTensor(),
         trn.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
+import sys
+sys.path.insert(0,"/home/data_ti5_c/mahc/CN_ICG/predict_CN_SCST/")
 
 from misc.resnet_utils import myResnet
 import misc.resnet as resnet
@@ -59,6 +62,9 @@ def main(params):
 
   imgs = json.load(open(params['input_json'], 'r'))
   imgs = imgs['images']
+  # BUG OOV
+  imgs = imgs[:10]
+  # ==========
   N = len(imgs)
 
   seed(123) # make reproducible
@@ -80,8 +86,12 @@ def main(params):
 
     I = I.astype('float32')/255.0
     I = torch.from_numpy(I.transpose([2,0,1])).cuda()
-    I = Variable(preprocess(I), volatile=True)
+    with torch.no_grad():
+        I = Variable(preprocess(I))
     tmp_fc, tmp_att = my_resnet(I, params['att_size'])
+    print(tmp_fc.shape)
+    print(tmp_att.shape)
+    input()
     # write to pkl
     np.save(os.path.join(dir_fc, str(img['cocoid'])), tmp_fc.data.cpu().float().numpy())
     np.savez_compressed(os.path.join(dir_att, str(img['cocoid'])), feat=tmp_att.data.cpu().float().numpy())

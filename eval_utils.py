@@ -77,6 +77,7 @@ def eval_split(model, crit, loader, eval_kwargs={}):
     loss_evals = 1e-8
     predictions = []
     while True:
+        # 重要的加载数据
         data = loader.get_batch(split)
         n = n + loader.batch_size
 
